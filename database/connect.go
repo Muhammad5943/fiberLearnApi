@@ -5,7 +5,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/Muhammad5943/notes-api-fiber/config"
+	"github.com/Muhammad5943/fiberLearnApi/config"
+	"github.com/Muhammad5943/fiberLearnApi/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -23,11 +24,19 @@ func ConnectDB() {
 	}
 
 	// Connection URL to connect to Postgres Database
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
+	dsn := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		config.Config("DB_HOST"), port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
+
 	// Connect to the DB and initialize the DB variable
 	DB, err = gorm.Open(postgres.Open(dsn))
 	if err != nil {
 		panic("failed to connect to database")
 	}
+
+	fmt.Println("Connected to Opened Oatabase")
+
+	DB.AutoMigrate(&model.Note{})
+	fmt.Println("Database Migrated")
 
 }
